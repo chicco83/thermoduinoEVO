@@ -1,0 +1,24 @@
+17-10-15
+
+-aggiunto messaggio sul client con countdown percambio stato attivazione/disattivazione
+-aggiunto countdown su lcd
+-risolto bug su upload su xively che rallentava il processore e bloccava l'uso dei pulsanti in locale e il salvataggio dei timer da app
+
+4-1-16
+
+spostato il messaggio di avvio o spegnimento caldaia in alto
+aggiunti 0 dove mancavano per non far scorrere i testi con cifre minori di 10
+implementato supporto per encoder rotativo con spegnimento del termostato tramite doppio click
+
+2-10-16
+
+rimosso codice interno alla routine networkcheck perche da errore e non ne ho trovato la causa. adesso la routine da sempre esito positivo.
+
+9-12-16
+
+il termostato si bloccava ogni tot secondi e si avviava a fatica. disattivato l'upload dei dati verso xively i problemi sembrano risolti
+aggiunto uno spazio dopo la data per evitare che rimanesse una C dopo la comparsa del countdown di spegnimento
+
+31-12-16
+
+rimosse routine di reset che impediscono di avviare il termostato senza connessione internet
