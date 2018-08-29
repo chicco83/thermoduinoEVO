@@ -1,3 +1,75 @@
+/************************* Store timers in EEPROM *************************************/
+void save_timer(int timer, float Action, int Hour, int Minute, int Day, int Enable)
+{
+  time_date();
+  if (timer == 1) {
+    if (DEBUG5) Serial.println(Action);
+
+    EEPROM.updateFloat (timer1_action_address, (timer1_action = Action));
+    EEPROM.updateByte (timer_1_hour_address, (timer_1_hour = Hour));
+    EEPROM.updateByte (timer_1_minute_address, (timer_1_minute = Minute));
+    EEPROM.updateByte (timer_1_day_address, (timer_1_day = Day));
+    EEPROM.updateByte (timer_1_enable_address, (timer_1_enable = Enable));
+  }
+  if (timer == 2) {
+    EEPROM.updateFloat (timer2_action_address, (timer2_action = Action));
+    EEPROM.updateByte (timer_2_hour_address, (timer_2_hour = Hour));
+    EEPROM.updateByte (timer_2_minute_address, (timer_2_minute = Minute));
+    EEPROM.updateByte (timer_2_day_address, (timer_2_day = Day));
+    EEPROM.updateByte (timer_2_enable_address, (timer_2_enable = Enable));
+  }
+  if (timer == 3) {
+    EEPROM.updateFloat (timer3_action_address, (timer3_action = Action));
+    EEPROM.updateByte (timer_3_hour_address, (timer_3_hour = Hour));
+    EEPROM.updateByte (timer_3_minute_address, (timer_3_minute = Minute));
+    EEPROM.updateByte (timer_3_day_address, (timer_3_day = Day));
+    EEPROM.updateByte (timer_3_enable_address, (timer_3_enable = Enable));
+  }
+  if (timer == 4) {
+    EEPROM.updateFloat (timer4_action_address, (timer4_action = Action));
+    EEPROM.updateByte (timer_4_hour_address, (timer_4_hour = Hour));
+    EEPROM.updateByte (timer_4_minute_address, (timer_4_minute = Minute));
+    EEPROM.updateByte (timer_4_day_address, (timer_4_day = Day));
+    EEPROM.updateByte (timer_4_enable_address, (timer_4_enable = Enable));
+  }
+  if (timer == 5) {
+    EEPROM.updateFloat (timer5_action_address, (timer5_action = Action));
+    EEPROM.updateByte (timer_5_hour_address, (timer_5_hour = Hour));
+    EEPROM.updateByte (timer_5_minute_address, (timer_5_minute = Minute));
+    EEPROM.updateByte (timer_5_day_address, (timer_5_day = Day));
+    EEPROM.updateByte (timer_5_enable_address, (timer_5_enable = Enable));
+  }
+  if (timer == 6) {
+    EEPROM.updateFloat (timer6_action_address, (timer6_action = Action));
+    EEPROM.updateByte (timer_6_hour_address, (timer_6_hour = Hour));
+    EEPROM.updateByte (timer_6_minute_address, (timer_6_minute = Minute));
+    EEPROM.updateByte (timer_6_day_address, (timer_6_day = Day));
+    EEPROM.updateByte (timer_6_enable_address, (timer_6_enable = Enable));
+  }
+  if (timer == 7) {
+    EEPROM.updateFloat (timer7_action_address, (timer7_action = Action));
+    EEPROM.updateByte (timer_7_hour_address, (timer_7_hour = Hour));
+    EEPROM.updateByte (timer_7_minute_address, (timer_7_minute = Minute));
+    EEPROM.updateByte (timer_7_day_address, (timer_7_day = Day));
+    EEPROM.updateByte (timer_7_enable_address, (timer_7_enable = Enable));
+  }
+  if (timer == 8) {
+    EEPROM.updateFloat (timer8_action_address, (timer8_action = Action));
+    EEPROM.updateByte (timer_8_hour_address, (timer_8_hour = Hour));
+    EEPROM.updateByte (timer_8_minute_address, (timer_8_minute = Minute));
+    EEPROM.updateByte (timer_8_day_address, (timer_8_day = Day));
+    EEPROM.updateByte (timer_8_enable_address, (timer_8_enable = Enable));
+  }
+  if (timer == 9) {
+    EEPROM.updateFloat (timer9_action_address, (timer9_action = Action));
+    EEPROM.updateByte (timer_9_hour_address, (timer_9_hour = Hour));
+    EEPROM.updateByte (timer_9_minute_address, (timer_9_minute = Minute));
+    EEPROM.updateByte (timer_9_day_address, (timer_9_day = Day));
+    EEPROM.updateByte (timer_9_enable_address, (timer_9_enable = Enable));
+  }
+  read_EEPROM();
+}
+
 /*************************** Check fot Ethernet Client *******************************************************************/
 void run_eth()
 {
@@ -1176,4 +1248,3 @@ void run_eth()
     client.stop();
   }
 }
-
