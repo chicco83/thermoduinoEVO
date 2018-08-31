@@ -22,3 +22,7 @@ aggiunto uno spazio dopo la data per evitare che rimanesse una C dopo la compars
 31-12-16
 
 rimosse routine di reset che impediscono di avviare il termostato senza connessione internet
+
+30-08-18
+
+aggiunto supporto a thingspeak
