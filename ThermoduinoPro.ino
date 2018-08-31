@@ -14,8 +14,8 @@
 #include <TimerOne.h>
 
 #include <ThingSpeak.h>                                                       //THINGSPEAK
-unsigned long myChannelNumber = 16728;
-const char * myWriteAPIKey = "ELJ26QMDNU5SYW2M";
+unsigned long myChannelNumber = xxxxxx;
+const char * myWriteAPIKey = "xxxxxxxxx";
 
 ClickEncoder *encoder;
 float last, value;
@@ -1037,7 +1037,8 @@ ThingSpeak.setField(1,cucina);
 ThingSpeak.setField(2,camera);
 ThingSpeak.setField(3,h0);
 ThingSpeak.setField(4,BP);
-
+ThingSpeak.setField(5,ext);
+      
   // Write the fields that you've set all at once.
  ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);  
 
