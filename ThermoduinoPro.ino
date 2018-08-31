@@ -12,8 +12,10 @@
 #include <avr/pgmspace.h>
 #include <ClickEncoder.h>
 #include <TimerOne.h>
-#include <ThingSpeak.h>
 
+#include <ThingSpeak.h>                                                       //THINGSPEAK
+unsigned long myChannelNumber = 16728;
+const char * myWriteAPIKey = "ELJ26QMDNU5SYW2M";
 
 ClickEncoder *encoder;
 float last, value;
@@ -33,7 +35,7 @@ void timerIsr() {
 #define DHTPIN1     (43)            // dht22 sensor pin
 const int System =  34;             // original thermostat rele pin
 const int Heater =  49;             // this thermostat rele pin
-int pirPin = 37;    //the digital pin connected to the PIR sensor's output
+int pirPin = 37;                     //the digital pin connected to the PIR sensor's output
 
 #include <OneWire.h>                  //
 #include <DallasTemperature.h>        //
@@ -308,11 +310,6 @@ char Rf5[] = "<meta http-equiv=refresh content=2,url=/b?7>";
 char Rf6[] = "<meta http-equiv=refresh content=25,url=/b?6>";
 char Rf7[] = "<meta http-equiv=refresh content=15,url=/b?7>";
 
-
-unsigned long myChannelNumber = 16728;
-const char * myWriteAPIKey = "ELJ26QMDNU5SYW2M";
-
-
 //int freeRam () {
 //  extern int __heap_start, *__brkval;
 //  int v;
@@ -500,9 +497,6 @@ void start_ethernet()
     IPAddress gw_ip(gw_ip1, gw_ip2, gw_ip3, gw_ip4);
     if (DEBUG5) Serial.println(gw_ip);
     Ethernet.begin(mac, ip, dns_ip, gw_ip);
-
-    ThingSpeak.begin(client);
-
 
   }
   else if (EEPROM.read(11) == '%' || networkonline == false) {
@@ -991,11 +985,12 @@ void setup()
   if (DEBUG1) Serial.println("Setup complete");
   if (DEBUG1) Serial.println("");
   calculate();
-  //  getData();
+
   DateTime now = RTC.now();
   lastTime2  = now.unixtime();
   digitalWrite(Heater, LOW);
 
+ThingSpeak.begin(client);
 
 }
 void(* resetFunc) (void) = 0; //declare reset function @ address 0
@@ -1014,7 +1009,7 @@ void loop()
 
   nowtime1 = now.unixtime();                    //
   if (abs(nowtime1 - lastTime1) > interval1)    //
-  { //
+  {                                             //
     lastTime1 = nowtime1;                       //
     h0 = dht1.readHumidity();                   //  READING OF SENSORS EXECUTE EVERY "INTERVAL1" VALUE
     cucina = dht1.readTemperature();            //
@@ -1033,36 +1028,36 @@ void loop()
     // Send data to Xively
   }
 
-  //  nowtime2 = now.unixtime();                           //
-  //  if (abs(nowtime2 - lastTime2) > interval2)           //
-  //  {                                                    // WEB UPLOAD OF SENSOR
-  //    lastTime2 = nowtime2;                              // READING MADE EVERY
-  //    //   getData();                                    // "INTERVAL2"
-  //    if ((Tc > 7) && (Tc < 40)) {                       //
-  //      int ret = xivelyclient.put(feed, xivelyKey);
-  //      //   sendData();                                 //
-  //    }                                                  //
-  //    else                                               //
-  //    { //
-  //      T = true;                                        //
-  //      if (DEBUG2) Serial.println("DHT read error");    //
-  //    }
-  //  }
-  //  if (networkonline == false)
-  //  {
-  //    resetcounter++;
-  //    currentMillis = millis();
-  //  if (currentMillis - previousMillis >= intervalNetworkCheck)
-  //  {
-  //    networkcheck();
-  //  }
-  //}
-  //  if(resetcounter >= 4)
-  //  {
-  //    Serial.println("Resetting........");
-  //    delay(100);
-  //    resetFunc();
-  //  }
+    nowtime2 = now.unixtime();                           //
+    if (abs(nowtime2 - lastTime2) > interval2)           //
+    {                                                    // WEB UPLOAD OF SENSOR
+      lastTime2 = nowtime2;                              // READING MADE EVERY
+                                                          // "INTERVAL2"
+ThingSpeak.setField(1,cucina);
+ThingSpeak.setField(2,camera);
+ThingSpeak.setField(3,h0);
+ThingSpeak.setField(4,BP);
+
+  // Write the fields that you've set all at once.
+ ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);  
+
+      
+    }
+//    if (networkonline == false)
+//    {
+//      resetcounter++;
+//      currentMillis = millis();
+//    if (currentMillis - previousMillis >= intervalNetworkCheck)
+//    {
+//      networkcheck();
+//    }
+//  }
+//    if(resetcounter >= 4)
+//    {
+//      Serial.println("Resetting........");
+//      delay(100);
+//      resetFunc();
+//    }
 
   nowTime3 = now.hour();
   if (nowTime3 != lastTime3)
