@@ -2,7 +2,7 @@ void display ()
 {
 
   lcd.setCursor(0, 0);
-  //  orologio ();
+//  orologio ();
   if (H == true) {
     lcd.setCursor (17, 0);
     lcd.print(" ON");
@@ -29,13 +29,13 @@ void display ()
   lcd.print(camera, 1);
   lcd.print(char( 223)); // Scrive il pallino dei gradi
   lcd.print("C ");
-  lcd.print("EXT");
-  if (ext < 10)
+  lcd.print("EXT ");
+if (ext < 10)
   {
     lcd.print(" "); //insert leading zero if ext temp value is less than 10
-    lcd.print(ext, 1);
+    lcd.print(ext,1);
   }
-  else  lcd.print(ext, 1); //display current ext temp
+  else  lcd.print(ext,1); //display current ext temp
   lcd.print(char( 223)); // Scrive il pallino dei gradi
   lcd.print("C");
   lcd.setCursor(0, 3);   //quarta riga, primo carattere
@@ -46,19 +46,19 @@ void display ()
     orologio();
   }
   else {
-    lcd.print("MAN ");
-    lcd.write(termometro);
-    lcd.print(" ");
-    lcd.print(Td, 1);
-    lcd.print(char( 223)); // Scrive il pallino dei gradi
-    lcd.print("C      ");
+        lcd.print("MAN ");
+        lcd.write(termometro);
+        lcd.print(" ");
+        lcd.print(Td, 1);
+        lcd.print(char( 223)); // Scrive il pallino dei gradi
+        lcd.print("C      ");
 
     if ((Td > Tc) && S && !ER && !H)                //
     { //
       lcd.setCursor(0, 0);
       lcd.print("ON tra: ");                        //
-      lcd.print(HeaterStatusDelay - Von * 1 );      //    IF THE RELE STATUS IS GOING TO CHANGE IT WILL DISPLAY A COUNTDOWD ON THE LAST LINE OF THE LCD
-      lcd.print(" sec");                            //
+      lcd.print(HeaterStatusDelay - Von * 1 );      //    IF THE RELE STATUS IS GOING TO CHANGE IT WILL DISPLAY A COUNTDOWD ON THE LAS T LINE OF THE LCD
+      lcd.print(" sec ");                            //
     }                                   //
     else {
       if (((Td < Tc) || !S || ER) && H)
@@ -66,11 +66,11 @@ void display ()
         lcd.setCursor(0, 0);
         lcd.print("OFF tra: ");
         lcd.print(HeaterStatusDelay - Voff * 1);
-        lcd.print(" sec");
+        lcd.print(" sec ");
       }
       else {
-        lcd.setCursor(0, 0);
-        orologio ();
+          lcd.setCursor(0, 0);
+          orologio ();
       }
     }
   }
@@ -137,5 +137,6 @@ void orologio()
     lcd.print(mese);
   }
   else  lcd.print(mese); //display current month
-  lcd.print(" ");
+        lcd.print(" ");
 }
+

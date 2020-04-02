@@ -1,4 +1,3 @@
-
 #include <LiquidCrystal_I2C.h>
 #include <Ethernet.h>
 #include <HttpClient.h>
@@ -13,10 +12,6 @@
 #include <ClickEncoder.h>
 #include <TimerOne.h>
 
-#include <ThingSpeak.h>                                                       //THINGSPEAK
-unsigned long myChannelNumber = xxxxxx;
-const char * myWriteAPIKey = "xxxxxxxxx";
-
 ClickEncoder *encoder;
 float last, value;
 void timerIsr() {
@@ -30,12 +25,12 @@ void timerIsr() {
 #define DEBUG5 1  //Debug Ethernet
 #define DEBUG6 1  //Debug Cosm
 // ++++++++++++++ DEFINIZIONE PIN SENSORI +++++
-//#define BUTTON_UP    39             // button increase Td
+//#define BUTTON_UP    39             // button increase Td   
 //#define BUTTON_DOWN  35             // button decrease Td
 #define DHTPIN1     (43)            // dht22 sensor pin
 const int System =  34;             // original thermostat rele pin
 const int Heater =  49;             // this thermostat rele pin
-int pirPin = 37;                     //the digital pin connected to the PIR sensor's output
+int pirPin = 37;    //the digital pin connected to the PIR sensor's output
 
 #include <OneWire.h>                  //
 #include <DallasTemperature.h>        //
@@ -130,7 +125,7 @@ DateTime up;
 
 
 unsigned int localPort = 8888;      // local port to listen for UDP packets
-IPAddress timeServer(193, 204, 114, 232);
+IPAddress timeServer(193, 204, 114, 232); //il codice richiede l'orario utc a http://rime.inrim.it/labtf/tempo-legale-italiano/
 const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
 byte packetBuffer[ NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
 EthernetUDP Udp;
@@ -287,7 +282,7 @@ byte mac[6] = {
   0x90, 0xA2, 0xDA, 0x00, 0x00, 0x00
 };
 
-byte ip[] = { 192, 168, 0, 4 };                              //  comment to use dhcp
+byte ip[] = { 192, 168, 1, 4 };                              //  comment to use dhcp
 
 IPAddress temp_ip;
 IPAddress dhcp_ip;
@@ -357,7 +352,7 @@ void synce_rtc()
 {
   sendNTPpacket(timeServer); // send an NTP packet to a time server
   // wait to see if a reply is available
-  delay(1000);
+  // delay(1000);
   if ( Udp.parsePacket() )
   {
     if (DEBUG6) Serial.println("NTP Packet recieved");
@@ -395,7 +390,7 @@ void synce_rtc()
       }
       Serial.println(epoch % 60); // print the second
     }
-    now = (epoch);
+ //   now = (epoch+3600);          //UTC+1  http://rime.inrim.it/labtf/tempo-legale-italiano/
     RTC.adjust(DateTime(now));
     now = RTC.now();
     int Month = (now.month());
@@ -465,7 +460,7 @@ unsigned long sendNTPpacket(IPAddress& address)
 }
 /***************************** start ethernet ***********************************************************************/
 void restart_ethernet() {
-  delay(1000);
+//  delay(1000);
   start_ethernet();
 }
 
@@ -497,7 +492,6 @@ void start_ethernet()
     IPAddress gw_ip(gw_ip1, gw_ip2, gw_ip3, gw_ip4);
     if (DEBUG5) Serial.println(gw_ip);
     Ethernet.begin(mac, ip, dns_ip, gw_ip);
-
   }
   else if (EEPROM.read(11) == '%' || networkonline == false) {
     // if (DEBUG5) Serial.println("DHCP IP ");
@@ -536,7 +530,6 @@ void start_ethernet()
   networkcheck();
 }
 
-/************************  check_first_run *****************************/
 void check_first_run()
 {
   if (DEBUG5) Serial.println("check_first_run ");
@@ -581,91 +574,91 @@ void check_first_run()
 /************************  Network check *****************************/
 void networkcheck()
 {
-  //  if (DEBUG1) Serial.println ("Network check");
-  //  if (client.connect(dnsServerToCheck, 80))
-  //  {
-  //    delay(300);
-  //    if (DEBUG1) Serial.print("connected to ");
-  //    if (DEBUG1) Serial.println(dnsServerToCheck);
-  //    client.println("GET / HTTP/1.1");
-  //    client.println();
-  //    while (client.connected())
-  //    {
-  //      if (client.available())
-  //      {
-  //        char c = client.read();
-  //        if (readString.length() < 20)
-  //          if (DEBUG1) Serial.print(c);
-  //        {
-  //          readString.concat(c);
-  //        }
-  //        if (c == '\n')
-  //        {
-  //          client.stop();
-  //          if (DEBUG1) Serial.println();
-  //          if (DEBUG1) Serial.println("DNS OK");
-  DNS = true;
-  networkonline = true;
-  N = true;
-  //          readString="";
-  //        }
-  //      }
-  //      if (!client.connected())
-  //      {
-  //        client.stop();
-  //        readString="";
-  //      }
-  //    }
-  //  }
-  //  if (!DNS)
-  //  {
-  //    if (DEBUG1) Serial.println("DNS Error");
-  //    if (DEBUG1) Serial.println("Check for IP");
-  //    if (client.connect(ServerToCheck, 80))
-  //    {
-  //      delay(300);
-  //      if (DEBUG1) Serial.print("connected to ");
-  //      if (DEBUG1) Serial.println(ServerToCheck);
-  //      client.println("GET / HTTP/1.1");
-  //      client.println();
-  //      while (client.connected())
-  //      {
-  //        if (client.available())
-  //        {
-  //          char c = client.read();
-  //          if (readString.length() < 20)
-  //            if (DEBUG1) Serial.print(c);
-  //          {
-  //            readString.concat(c);
-  //          }
-  //          if (c == '\n')
-  //          {
-  //            client.stop();
-  //            if (DEBUG1) Serial.println();
-  //            if (DEBUG1) Serial.println("IP lookup OK");
-  //            if (DEBUG1) Serial.println("DNS not available");
-  //            networkonline = true;
-  //            N = true;
-  //            readString="";
-  //          }
-  //        }
-  //        if (!client.connected())
-  //        {
-  //          if (DEBUG1) Serial.println("Disconnecting");
-  //          client.stop();
-  //          readString="";
-  //        }
-  //      }
-  //    }
-  //    else
-  //    {
-  //      if (DEBUG1) Serial.println("Network Error");
-  //      resetcounter++;
-  //      networkonline = false;
-  //      N = false;
-  //    }
-  //  }
-}
+//  if (DEBUG1) Serial.println ("Network check");
+//  if (client.connect(dnsServerToCheck, 80))
+//  {
+//    delay(300);
+//    if (DEBUG1) Serial.print("connected to ");
+//    if (DEBUG1) Serial.println(dnsServerToCheck);
+//    client.println("GET / HTTP/1.1");
+//    client.println();
+//    while (client.connected())
+//    {
+//      if (client.available()) 
+//      {
+//        char c = client.read();
+//        if (readString.length() < 20)
+//          if (DEBUG1) Serial.print(c);
+//        {
+//          readString.concat(c);
+//        }
+//        if (c == '\n')
+//        {
+//          client.stop();
+//          if (DEBUG1) Serial.println();
+//          if (DEBUG1) Serial.println("DNS OK");
+          DNS = true;
+          networkonline = true;
+          N = true;
+//          readString="";
+//        }
+//      }
+//      if (!client.connected()) 
+//      {
+//        client.stop();
+//        readString="";
+//      }
+//    }
+//  }
+//  if (!DNS)
+//  {
+//    if (DEBUG1) Serial.println("DNS Error");
+//    if (DEBUG1) Serial.println("Check for IP");
+//    if (client.connect(ServerToCheck, 80))
+//    {
+//      delay(300);
+//      if (DEBUG1) Serial.print("connected to ");
+//      if (DEBUG1) Serial.println(ServerToCheck);
+//      client.println("GET / HTTP/1.1");
+//      client.println();
+//      while (client.connected())
+//      {
+//        if (client.available()) 
+//        {
+//          char c = client.read();
+//          if (readString.length() < 20)
+//            if (DEBUG1) Serial.print(c);
+//          {
+//            readString.concat(c);
+//          }
+//          if (c == '\n')
+//          {
+//            client.stop();
+//            if (DEBUG1) Serial.println();
+//            if (DEBUG1) Serial.println("IP lookup OK");
+//            if (DEBUG1) Serial.println("DNS not available");
+//            networkonline = true;
+//            N = true;
+//            readString="";
+//          }
+//        }
+//        if (!client.connected()) 
+//        {
+//          if (DEBUG1) Serial.println("Disconnecting");
+//          client.stop();
+//          readString="";
+//        }
+//      }
+//    }
+//    else
+//    {
+//      if (DEBUG1) Serial.println("Network Error");
+//      resetcounter++;
+//      networkonline = false;
+//      N = false;
+//    }
+//  }
+  }
 /************************  Read EEPROM *****************************/
 const int EEPROM_MIN_ADDR = 0;
 const int EEPROM_MAX_ADDR = 511;
@@ -919,7 +912,7 @@ void read_EEPROM()
   if (Tw > Tmin && Tw < Tmax)
   {
     Td = Tw;
-
+    
     if (DEBUG1) Serial.print("Temperature in EEPROM data found: ");
     if (DEBUG1) Serial.println(Tw);
   }
@@ -976,24 +969,24 @@ void setup()
   read_EEPROM();
   bmp180_check();
 
-  encoder = new ClickEncoder(A1, A0, A2);
+ encoder = new ClickEncoder(A1, A0, A2);
   Timer1.initialize(1000);
-  Timer1.attachInterrupt(timerIsr);
-
+  Timer1.attachInterrupt(timerIsr); 
+  
   EEPROM.setMaxAllowedWrites(200);
 
   if (DEBUG1) Serial.println("Setup complete");
   if (DEBUG1) Serial.println("");
   calculate();
-
+  //  getData();
   DateTime now = RTC.now();
   lastTime2  = now.unixtime();
   digitalWrite(Heater, LOW);
 
-ThingSpeak.begin(client);
-
 }
 void(* resetFunc) (void) = 0; //declare reset function @ address 0
+
+ 
 
 
 /****************************************************************************************************/
@@ -1009,7 +1002,7 @@ void loop()
 
   nowtime1 = now.unixtime();                    //
   if (abs(nowtime1 - lastTime1) > interval1)    //
-  {                                             //
+  { //
     lastTime1 = nowtime1;                       //
     h0 = dht1.readHumidity();                   //  READING OF SENSORS EXECUTE EVERY "INTERVAL1" VALUE
     cucina = dht1.readTemperature();            //
@@ -1025,47 +1018,46 @@ void loop()
     pressione ();                               //
     calculate();                                //
     T = true;                                   //
-    // Send data to Xively
+                                                // Send data to Xively
   }
 
-    nowtime2 = now.unixtime();                           //
-    if (abs(nowtime2 - lastTime2) > interval2)           //
-    {                                                    // WEB UPLOAD OF SENSOR
-      lastTime2 = nowtime2;                              // READING MADE EVERY
-                                                          // "INTERVAL2"
-ThingSpeak.setField(1,cucina);
-ThingSpeak.setField(2,camera);
-ThingSpeak.setField(3,h0);
-ThingSpeak.setField(4,BP);
-ThingSpeak.setField(5,ext);
-      
-  // Write the fields that you've set all at once.
- ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);  
-
-      
-    }
-//    if (networkonline == false)
-//    {
-//      resetcounter++;
-//      currentMillis = millis();
-//    if (currentMillis - previousMillis >= intervalNetworkCheck)
-//    {
-//      networkcheck();
+//  nowtime2 = now.unixtime();                           //
+//  if (abs(nowtime2 - lastTime2) > interval2)           //
+//  {                                                    // WEB UPLOAD OF SENSOR
+//    lastTime2 = nowtime2;                              // READING MADE EVERY
+//    //   getData();                                    // "INTERVAL2"
+//    if ((Tc > 7) && (Tc < 40)) {                       //
+//      int ret = xivelyclient.put(feed, xivelyKey);
+//      //   sendData();                                 //
+//    }                                                  //
+//    else                                               //
+//    { //
+//      T = true;                                        //
+//      if (DEBUG2) Serial.println("DHT read error");    //
 //    }
 //  }
-//    if(resetcounter >= 4)
-//    {
-//      Serial.println("Resetting........");
-//      delay(100);
-//      resetFunc();
-//    }
-
+//  if (networkonline == false)
+//  {
+//    resetcounter++;
+//    currentMillis = millis();  
+//  if (currentMillis - previousMillis >= intervalNetworkCheck)
+//  {
+//    networkcheck();
+//  }
+//}
+//  if(resetcounter >= 4)
+//  {
+//    Serial.println("Resetting........");
+//    delay(100);
+//    resetFunc();
+//  }
+ 
   nowTime3 = now.hour();
   if (nowTime3 != lastTime3)
   {
     synce_rtc();
-    //    if (DEBUG2)  up_time();
-    //    if (DEBUG2) Serial.println(uptime);
+//    if (DEBUG2)  up_time();
+//    if (DEBUG2) Serial.println(uptime);
     if (N && (resetcounter > 0))
     {
       resetcounter = 0;
@@ -1075,10 +1067,83 @@ ThingSpeak.setField(5,ext);
   if (nowTime4 != lastTime4)
   {
     lastTime4 = now.day();
-    //    Serial.println("Resetting........");
-    //    delay(100);
-    //    resetFunc();
+//    Serial.println("Resetting........");
+//    delay(100);
+//    resetFunc();
   }
+}
+
+
+/************************* Store timers in EEPROM *************************************/
+void save_timer(int timer, float Action, int Hour, int Minute, int Day, int Enable)
+{
+  time_date();
+  if (timer == 1) {
+    if (DEBUG5) Serial.println(Action);
+
+    EEPROM.updateFloat (timer1_action_address, (timer1_action = Action));
+    EEPROM.updateByte (timer_1_hour_address, (timer_1_hour = Hour));
+    EEPROM.updateByte (timer_1_minute_address, (timer_1_minute = Minute));
+    EEPROM.updateByte (timer_1_day_address, (timer_1_day = Day));
+    EEPROM.updateByte (timer_1_enable_address, (timer_1_enable = Enable));
+  }
+  if (timer == 2) {
+    EEPROM.updateFloat (timer2_action_address, (timer2_action = Action));
+    EEPROM.updateByte (timer_2_hour_address, (timer_2_hour = Hour));
+    EEPROM.updateByte (timer_2_minute_address, (timer_2_minute = Minute));
+    EEPROM.updateByte (timer_2_day_address, (timer_2_day = Day));
+    EEPROM.updateByte (timer_2_enable_address, (timer_2_enable = Enable));
+  }
+  if (timer == 3) {
+    EEPROM.updateFloat (timer3_action_address, (timer3_action = Action));
+    EEPROM.updateByte (timer_3_hour_address, (timer_3_hour = Hour));
+    EEPROM.updateByte (timer_3_minute_address, (timer_3_minute = Minute));
+    EEPROM.updateByte (timer_3_day_address, (timer_3_day = Day));
+    EEPROM.updateByte (timer_3_enable_address, (timer_3_enable = Enable));
+  }
+  if (timer == 4) {
+    EEPROM.updateFloat (timer4_action_address, (timer4_action = Action));
+    EEPROM.updateByte (timer_4_hour_address, (timer_4_hour = Hour));
+    EEPROM.updateByte (timer_4_minute_address, (timer_4_minute = Minute));
+    EEPROM.updateByte (timer_4_day_address, (timer_4_day = Day));
+    EEPROM.updateByte (timer_4_enable_address, (timer_4_enable = Enable));
+  }
+  if (timer == 5) {
+    EEPROM.updateFloat (timer5_action_address, (timer5_action = Action));
+    EEPROM.updateByte (timer_5_hour_address, (timer_5_hour = Hour));
+    EEPROM.updateByte (timer_5_minute_address, (timer_5_minute = Minute));
+    EEPROM.updateByte (timer_5_day_address, (timer_5_day = Day));
+    EEPROM.updateByte (timer_5_enable_address, (timer_5_enable = Enable));
+  }
+  if (timer == 6) {
+    EEPROM.updateFloat (timer6_action_address, (timer6_action = Action));
+    EEPROM.updateByte (timer_6_hour_address, (timer_6_hour = Hour));
+    EEPROM.updateByte (timer_6_minute_address, (timer_6_minute = Minute));
+    EEPROM.updateByte (timer_6_day_address, (timer_6_day = Day));
+    EEPROM.updateByte (timer_6_enable_address, (timer_6_enable = Enable));
+  }
+  if (timer == 7) {
+    EEPROM.updateFloat (timer7_action_address, (timer7_action = Action));
+    EEPROM.updateByte (timer_7_hour_address, (timer_7_hour = Hour));
+    EEPROM.updateByte (timer_7_minute_address, (timer_7_minute = Minute));
+    EEPROM.updateByte (timer_7_day_address, (timer_7_day = Day));
+    EEPROM.updateByte (timer_7_enable_address, (timer_7_enable = Enable));
+  }
+  if (timer == 8) {
+    EEPROM.updateFloat (timer8_action_address, (timer8_action = Action));
+    EEPROM.updateByte (timer_8_hour_address, (timer_8_hour = Hour));
+    EEPROM.updateByte (timer_8_minute_address, (timer_8_minute = Minute));
+    EEPROM.updateByte (timer_8_day_address, (timer_8_day = Day));
+    EEPROM.updateByte (timer_8_enable_address, (timer_8_enable = Enable));
+  }
+  if (timer == 9) {
+    EEPROM.updateFloat (timer9_action_address, (timer9_action = Action));
+    EEPROM.updateByte (timer_9_hour_address, (timer_9_hour = Hour));
+    EEPROM.updateByte (timer_9_minute_address, (timer_9_minute = Minute));
+    EEPROM.updateByte (timer_9_day_address, (timer_9_day = Day));
+    EEPROM.updateByte (timer_9_enable_address, (timer_9_enable = Enable));
+  }
+  read_EEPROM();
 }
 
 /**********Calculate if heater must turn on and print results *************/

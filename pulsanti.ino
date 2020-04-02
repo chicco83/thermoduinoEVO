@@ -1,39 +1,39 @@
 void read_button()
 {
-
-  value += encoder->getValue();
+  
+   value += encoder->getValue();
 
   if (value != last) {
-    Td += (value - last) / 20;
+    Td += (value-last)/20;
     last = value;
-
+    
     Serial.print("Encoder Value: ");
     Serial.println(value, 1);
-  }
-
-  ClickEncoder::Button b = encoder->getButton();
+    }
+    
+    ClickEncoder::Button b = encoder->getButton();
   if (b != ClickEncoder::Open) {
     Serial.print("Button: ");
-
+   
     switch (b) {
 
       case ClickEncoder::DoubleClicked:
-        if (S == true) {                          // se il termostato è acceso
-          S = false;                                // lo spengo
-          H = false;                                // metto lo status della caldaia su spento
-          digitalWrite(Heater, LOW);               // e spengo il rele
+if (S == true) {                          // se il termostato è acceso
+S = false;                                // lo spengo
+H = false;                                // metto lo status della caldaia su spento
+digitalWrite(Heater, LOW);               // e spengo il rele
 
 
-        }
-        else {
-
-          S = true;
-
-        }
-        break;
-    }
-  }
 }
+ else{
+ 
+ S = true;
+ 
+}
+        break;
+  }  
+  }  
+}    
 
 
 
@@ -48,8 +48,8 @@ void read_button()
 //// will quickly become a bigger number than can be stored in an int.
 //long lastDebounceTime = 0;  // the last time the output pin was toggled
 //long debounceDelay = 50;    // the debounce time; increase if the output flickers
-
-
+    
+    
 //  int readingUP = digitalRead(BUTTON_UP);
 //  if (readingUP != lastButtonStateUP) {
 //    // reset the debouncing timer
@@ -70,7 +70,7 @@ void read_button()
 //        EEPROM.updateFloat(address_temp, Td); //  enable to store manual value set by buttons
 //      }
 //    }
-//  }
+//  }              
 //  lastButtonStateUP = readingUP;                                    // save the reading.  Next time through the loop
 //                                                                   // it'll be the lastButtonState:
 //  int readingDOWN = digitalRead(BUTTON_DOWN);
@@ -95,3 +95,5 @@ void read_button()
 //  }
 //  lastButtonStateDOWN = readingDOWN;                            // save the reading.  Next time through the loop,
 //                                                                // it'll be the lastButtonState:
+
+

@@ -23,6 +23,17 @@ aggiunto uno spazio dopo la data per evitare che rimanesse una C dopo la compars
 
 rimosse routine di reset che impediscono di avviare il termostato senza connessione internet
 
-30-08-18
+10-11-18
 
-aggiunto supporto a thingspeak
+sistemati alcuni spazi errati sul display lcd
+
+19-11-18
+
+risolto bug sincronizzazione ora tra inverno e estate.
+il codice richiede l'orario utc a http://rime.inrim.it/labtf/tempo-legale-italiano/
+e aggiunge un ora per ottenere l'orario italiano
+
+2/4/20
+
+commentati delay sulla parte di rete alle righe 355 rtc sync e 463 restart_ethernet
+rimossa la modifica per fare  l'ora legale riga 393 e riattivata la parte di codice che aggiunge 1 o 2 ore a tempo utc righe 396-407

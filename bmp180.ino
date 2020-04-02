@@ -6,9 +6,9 @@
    sensor in any data logs, etc.  To assign a unique ID, simply
    provide an appropriate value in the constructor below (12345
    is used by default in this example).
-
+   
 */
-
+   
 Adafruit_BMP085_Unified bmp = Adafruit_BMP085_Unified(10085);
 
 /**************************************************************************/
@@ -20,11 +20,11 @@ Adafruit_BMP085_Unified bmp = Adafruit_BMP085_Unified(10085);
 void bmp180_check(void)
 {
 
-  if (!bmp.begin())
+  if(!bmp.begin())
   {
     /* There was a problem detecting the BMP085 ... check your connections */
     Serial.print("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
-    while (1);
+    while(1);
   }
 
 
@@ -37,28 +37,28 @@ void bmp180_check(void)
   Serial.print  ("Unique ID:    "); Serial.println(sensor.sensor_id);
   Serial.print  ("Max Value:    "); Serial.print(sensor.max_value); Serial.println(" hPa");
   Serial.print  ("Min Value:    "); Serial.print(sensor.min_value); Serial.println(" hPa");
-  Serial.print  ("Resolution:   "); Serial.print(sensor.resolution); Serial.println(" hPa");
+  Serial.print  ("Resolution:   "); Serial.print(sensor.resolution); Serial.println(" hPa");  
   Serial.println("------------------------------------");
   Serial.println("");
   delay(500);
 }
 
 
-void pressione()
+void pressione() 
 {
-  /* Get a new sensor event */
+  /* Get a new sensor event */ 
   sensors_event_t event;
   bmp.getEvent(&event);
   BP = event.pressure;
 
-
-  //  /* Display the results (barometric pressure is measure in hPa) */
-  //  if (event.pressure)
-  //  {
-  //    /* Display atmospheric pressue in hPa */
-  //    Serial.print("Pressure:    ");
-  //    Serial.print(event.pressure);
-  //    Serial.println(" hPa");
-  //
-  //  }
+ 
+//  /* Display the results (barometric pressure is measure in hPa) */
+//  if (event.pressure)
+//  {
+//    /* Display atmospheric pressue in hPa */
+//    Serial.print("Pressure:    ");
+//    Serial.print(event.pressure);
+//    Serial.println(" hPa");
+//
+//  }
 }
